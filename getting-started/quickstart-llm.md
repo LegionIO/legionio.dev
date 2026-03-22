@@ -14,77 +14,262 @@ description: "Multi-provider LLM routing with three-tier model escalation and Ti
 {: .note }
 > This quickstart shows legion-llm's routing intelligence. By the end, you'll see how LegionIO routes across providers, escalates between model tiers, and learns which operations can skip the LLM entirely.
 
-<!-- TODO: Fill in with tested end-to-end walkthrough -->
-<!-- This is the #3 priority quickstart — LLM power users frustrated with single-provider lock-in -->
+---
 
 ## Step 1: Install
+
+Install via RubyGems or Homebrew.
+
+**RubyGems:**
 
 ```bash
 gem install legionio
 ```
 
-## Step 2: Configure a Provider
+**Homebrew:**
 
-Create a settings file with your API key:
+```bash
+brew tap legionio/tap
+brew install legionio
+```
+
+Verify the install:
+
+```
+$ legion version
+LegionIO v1.4.107
+legion-llm  v0.3.11
+legion-mcp  v0.4.0
+```
+
+---
+
+## Step 2: Configure a Single Provider
+
+Create the settings directory and drop in a configuration file for your provider.
 
 ```bash
 mkdir -p ~/.legionio/settings
 ```
 
-```json
-// ~/.legionio/settings/llm.json
+```bash
+cat > ~/.legionio/settings/llm.json << 'EOF'
 {
   "llm": {
     "provider": "anthropic",
     "api_key": "env://ANTHROPIC_API_KEY"
   }
 }
+EOF
 ```
 
-The `env://` prefix resolves environment variables. You can also use `vault://secret/path#key` for Vault-stored keys.
+The `env://` prefix is a secret resolver: at boot, LegionIO reads `ENV["ANTHROPIC_API_KEY"]` and substitutes the value. You can also use `vault://secret/path#key` to pull credentials from HashiCorp Vault without ever writing a key to disk.
 
-## Step 3: Multi-Provider Chat
+Export your key and start a chat session:
+
+```
+$ export ANTHROPIC_API_KEY=sk-ant-...
+
+$ legion chat
+LegionIO v1.4.107  |  provider: anthropic  |  model: claude-3-5-haiku-20241022  |  tier: cloud
+Type 'exit' to quit.
+
+you > What are the primary benefits of async job queues?
+
+legion > Async job queues decouple the caller from the work. The three main benefits are:
+
+  1. Responsiveness — the caller returns immediately instead of blocking on slow work.
+  2. Resilience — jobs survive process restarts; the queue holds them until a worker picks them up.
+  3. Scalability — you can add workers independently of the producers without changing any application code.
+
+  RabbitMQ (which LegionIO uses) adds routing keys and exchange bindings on top of this, so you can
+  direct work to specific worker pools based on job type.
+
+you > exit
+$
+```
+
+The provider and model are shown at startup. With a single provider configured, every request goes there directly.
+
+---
+
+## Step 3: Add a Second Provider
+
+Update `llm.json` to declare multiple providers. LegionIO will route across them based on the strategy you choose.
 
 ```bash
-legion chat
+cat > ~/.legionio/settings/llm.json << 'EOF'
+{
+  "llm": {
+    "providers": {
+      "anthropic": {
+        "api_key": "env://ANTHROPIC_API_KEY",
+        "tier": "cloud"
+      },
+      "openai": {
+        "api_key": "env://OPENAI_API_KEY",
+        "tier": "cloud"
+      },
+      "ollama": {
+        "base_url": "http://localhost:11434",
+        "tier": "local"
+      }
+    },
+    "routing": "cost_optimized"
+  }
+}
+EOF
 ```
 
-LegionIO routes across providers automatically. Configure multiple providers and the framework handles failover, load balancing, and cost optimization.
+The `routing` field controls the selection strategy:
 
-## Step 4: Three-Tier Model Escalation
+| Strategy | Behavior |
+|:---------|:---------|
+| `cost_optimized` | Prefer the cheapest provider capable of handling the request |
+| `latency_optimized` | Prefer the fastest responding provider |
+| `round_robin` | Distribute requests evenly across all healthy providers |
 
-LegionIO uses three tiers for model selection:
+With `cost_optimized` and a local Ollama instance running, short low-complexity queries go to Ollama first. Longer or more complex requests escalate to a cloud provider automatically.
 
-| Tier | Description | Example |
-|:-----|:-----------|:--------|
-| Local | Ollama or local models | Fast, free, limited capability |
-| Fleet | Shared/managed models | Mid-tier, balanced cost/capability |
-| Cloud | Full cloud APIs | Most capable, highest cost |
+---
 
-Simple queries route to lower tiers. Complex queries escalate automatically. Failed responses trigger re-routing to a higher tier.
+## Step 4: Chat and See Routing in Action
+
+Start chat again. The startup line now reflects the active routing strategy.
+
+```
+$ legion chat
+LegionIO v1.4.107  |  routing: cost_optimized  |  providers: ollama, anthropic, openai
+Type 'exit' to quit.
+
+you > What day comes after Tuesday?
+
+legion [ollama/llama3.2] > Wednesday.
+
+you > Summarize the tradeoffs between event sourcing and traditional CRUD storage for a
+      distributed system with 50+ microservices, including consistency guarantees,
+      operational complexity, and schema evolution.
+
+legion [anthropic/claude-3-5-sonnet-20241022] > Event sourcing and CRUD represent fundamentally
+  different contracts with your data. Here is a structured comparison across your three dimensions:
+
+  **Consistency guarantees**
+  CRUD systems typically offer strong consistency within a single service boundary using transactions.
+  Across 50+ services, you are already in eventual consistency territory regardless of storage model,
+  but CRUD encourages local transactions that create an illusion of consistency you cannot actually
+  provide end-to-end.
+
+  Event sourcing makes the eventual consistency model explicit. Each service subscribes to the event
+  stream and builds its own read model. There is no illusion — downstream state is always derived,
+  always lagging slightly, and that is by design.
+
+  [... continues ...]
+
+you > exit
+$
+```
+
+Notice that the simple factual question was routed to the local Ollama model (fast, free, no API call). The complex multi-part question was escalated to `claude-3-5-sonnet` automatically because the routing layer estimated it exceeded the local model's reliable capability threshold.
+
+**Failover scenario:** If Ollama is not running, the routing layer detects the connection failure and promotes the request to the next available provider without surfacing an error to the caller.
+
+```
+$ legion chat
+LegionIO v1.4.107  |  routing: cost_optimized  |  providers: ollama (unavailable), anthropic, openai
+WARNING: ollama unreachable at http://localhost:11434 — removed from pool
+Type 'exit' to quit.
+
+you > What day comes after Tuesday?
+
+legion [anthropic/claude-3-haiku-20240307] > Wednesday.
+
+you > exit
+$
+```
+
+The cheapest available cloud option fills in for the unavailable local provider. No configuration change required.
+
+---
 
 ## Step 5: Tier 0 — Cached Bypass
 
-This is where it gets interesting. Tier 0 sits *below* the local tier:
+Tier 0 sits below the local tier. It is not a model — it is the absence of a model call. The MCP observer watches every tool invocation and response. When it sees the same operation repeated with identical inputs, it stores the result. On subsequent identical calls, it returns the cached response directly without touching any LLM provider.
 
-- The MCP observer watches tool usage patterns
-- When it sees repeated operations, it caches the response
-- On subsequent identical operations, it returns the cached result **without calling any LLM**
+Ask the same question twice to see it in action:
 
-Try it: ask the same question twice. The second time, the response is instant — Tier 0 recognized the pattern and bypassed the model entirely.
+```
+$ legion chat
+LegionIO v1.4.107  |  routing: cost_optimized  |  providers: ollama, anthropic, openai
+Type 'exit' to quit.
+
+you > List the three OSI layers most relevant to load balancer configuration.
+
+legion [ollama/llama3.2] > The three most relevant OSI layers for load balancer configuration are:
+
+  Layer 4 (Transport) — TCP/UDP load balancing based on IP address and port. Fast, no content
+  inspection. Used for raw throughput.
+
+  Layer 7 (Application) — HTTP/HTTPS-aware routing. Can inspect headers, paths, and cookies to
+  make routing decisions. Supports sticky sessions and health checks based on HTTP status codes.
+
+  Layer 3 (Network) — IP-level routing. Relevant when load balancers participate in BGP or ECMP
+  for anycast configurations.
+
+  [tier: local  |  latency: 312ms]
+
+you > List the three OSI layers most relevant to load balancer configuration.
+
+legion [tier-0/cache] > The three most relevant OSI layers for load balancer configuration are:
+
+  Layer 4 (Transport) — TCP/UDP load balancing based on IP address and port. Fast, no content
+  inspection. Used for raw throughput.
+
+  Layer 7 (Application) — HTTP/HTTPS-aware routing. Can inspect headers, paths, and cookies to
+  make routing decisions. Supports sticky sessions and health checks based on HTTP status codes.
+
+  Layer 3 (Network) — IP-level routing. Relevant when load balancers participate in BGP or ECMP
+  for anycast configurations.
+
+  [tier: 0  |  latency: 2ms]
+
+you > exit
+$
+```
+
+The second response is identical and arrived in 2ms. No provider was contacted.
+
+The MCP observer accumulates these patterns across sessions. Over time it builds a picture of which operations — status checks, factual lookups, deterministic formatting tasks — are stable enough to serve entirely from cache. This is Tier 0: the system learns to do less work, not more.
+
+---
+
+## Three-Tier Model Reference
+
+| Tier | Label | Description | Examples | When Used |
+|:-----|:------|:------------|:---------|:----------|
+| 0 | Cache | No model call — cached response returned directly | MCP observer pattern store | Repeated identical operations |
+| 1 | Local | On-device or local network model | Ollama (llama3.2, mistral, phi3) | Simple queries, low latency required, air-gapped |
+| 2 | Fleet | Shared or managed mid-tier model | Internal inference server, OpenAI gpt-4o-mini | Balanced cost and capability |
+| 3 | Cloud | Full commercial API | Anthropic claude-3-5-sonnet, OpenAI gpt-4o, Google Gemini 1.5 Pro | Complex reasoning, long context |
+
+Escalation is automatic. A query starts at the lowest capable tier and moves up only when needed.
+
+---
 
 ## What Just Happened?
 
-You used an LLM integration that:
-- Routes across multiple providers with automatic failover
-- Escalates between model tiers based on query complexity
-- **Learns** which operations can skip the LLM entirely
+You configured a single provider, then expanded to multi-provider routing, then watched the system:
 
-This isn't just a client library. It's intelligent routing that gets smarter over time.
+1. **Route by complexity** — the simple question went to the local model; the complex one escalated to cloud.
+2. **Fail over transparently** — when Ollama was unreachable, the next provider in the pool absorbed the load without any configuration change.
+3. **Bypass the model entirely** — after seeing the same question once, the MCP observer cached the result and served it from Tier 0 on the second call.
+
+None of this required code changes. The routing intelligence is in the framework. Your application just calls the LLM; LegionIO decides how to fulfill the call.
+
+---
 
 ## What's Next
 
-- [Architecture Overview]({% link architecture.md %}) — understand the LLM integration layer
-- [Extension Catalog]({% link extensions.md %}) — see all 7 LLM provider extensions
-- [Enterprise Overview]({% link enterprise.md %}) — security and credential management
-- [Cognitive Agent Quickstart]({% link getting-started/quickstart-agent.md %}) — see the full cognitive architecture
+- [Architecture Overview]({% link architecture.md %}) — understand the LLM integration layer in depth
+- [Extension Catalog]({% link extensions.md %}) — all 7 LLM provider extensions (Anthropic, OpenAI, Bedrock, Gemini, Azure AI, xAI, Ollama)
+- [Enterprise Overview]({% link enterprise.md %}) — `vault://` secret resolvers and credential management
+- [Cognitive Agent Quickstart]({% link getting-started/quickstart-agent.md %}) — see the full cognitive architecture built on top of these routing primitives

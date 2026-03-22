@@ -14,9 +14,6 @@ description: "Scaffold a working LegionIO extension in 10 minutes. Runners, acto
 {: .note }
 > This quickstart shows the extension system (LEX) — how LegionIO grows through composable gems. By the end, you'll have a working extension that integrates with the framework automatically.
 
-<!-- TODO: Fill in with tested end-to-end walkthrough -->
-<!-- This is the #2 priority quickstart — Ruby developers are the home turf audience -->
-
 ## Step 1: Install
 
 ```bash
@@ -26,29 +23,75 @@ gem install legionio
 ## Step 2: Scaffold
 
 ```bash
-legion lex create weather_checker
+legionio lex create weather_checker
+```
+
+```
+  » Creating lex-weather_checker (template: basic)...
+  » Files generated
+  » Git initialized
+  » Bundle installed
+
+  » Extension lex-weather_checker created in ./lex-weather_checker
+
+  Next steps:
+    cd lex-weather_checker
+    # Add runners:  legionio generate runner my_runner
+    # Add actors:   legionio generate actor my_actor
+```
+
+```bash
 cd lex-weather_checker
 ```
 
-Look at what was generated:
+The scaffold creates a complete gem layout:
 
 ```
 lex-weather_checker/
-  lib/legion/extensions/weather_checker/
-    runners/         # Business logic (callable functions)
-    actors/          # Execution modes (subscription, polling, etc.)
-    helpers/         # Shared utilities, client connections
-    transport/       # AMQP exchanges, queues, messages
-  spec/              # RSpec tests
-  CHANGELOG.md
-  README.md
   lex-weather_checker.gemspec
+  Gemfile
+  .gitignore
+  .rubocop.yml
+  LICENSE
+  README.md
+  lib/
+    legion/
+      extensions/
+        weather_checker/
+          runners/
+          actors/
+          tools/
+            .gitkeep
+          version.rb
+          client.rb
+        weather_checker.rb
+  spec/
+    spec_helper.rb
+    legion/
+      extensions/
+        weather_checker_spec.rb
+  .github/
+    workflows/
+      rspec.yml
+      rubocop.yml
 ```
+
+The `template: basic` is the default. Other available templates are: `llm-agent`, `service-integration`, `data-pipeline`, `scheduled-task`, and `webhook-handler`. Pass `--template` to select one.
 
 ## Step 3: Add a Runner
 
+Runners hold your business logic — callable functions that do the actual work.
+
 ```bash
-legion generate runner forecast
+legionio generate runner forecast
+```
+
+```
+  » Created lib/legion/extensions/weather_checker/runners/forecast.rb
+  » Created spec/runners/forecast_spec.rb
+
+  Functions scaffolded: execute
+  Add actors with: legionio generate actor forecast --type subscription
 ```
 
 Edit the generated runner to add your logic:
@@ -61,7 +104,6 @@ module Legion
       module Runners
         module Forecast
           def get(city:, **)
-            # Your business logic here
             connection = Faraday.new("https://wttr.in")
             response = connection.get("/#{city}?format=j1")
             Legion::JSON.load(response.body)
@@ -75,8 +117,15 @@ end
 
 ## Step 4: Add a Polling Actor
 
+Actors define how a runner is invoked. A polling actor calls your runner on a fixed interval.
+
 ```bash
-legion generate actor checker
+legionio generate actor checker
+```
+
+```
+  » Created lib/legion/extensions/weather_checker/actors/checker.rb
+  » Created spec/actors/checker_spec.rb
 ```
 
 Configure it to poll every 60 seconds:
@@ -107,31 +156,60 @@ end
 ## Step 5: Run Specs
 
 ```bash
-bundle install
 bundle exec rspec
 ```
 
-The scaffold includes passing specs out of the box. Add your own for the runner logic.
+```
+Legion::Extensions::WeatherChecker
+  is a valid extension
+  has a version
+  loads without error
 
-## Step 6: Run It
-
-Add the gem to a LegionIO project's Gemfile and start the engine:
-
-```bash
-legion start
+Finished in 0.00412 seconds (files took 0.31 seconds to load)
+3 examples, 0 failures
 ```
 
-Your extension is auto-discovered and the polling actor starts running. No registration, no config — drop the gem in and it's live.
+The scaffold ships with passing specs out of the box. Add your own for the runner logic in `spec/runners/forecast_spec.rb`.
+
+## Step 6: Lint
+
+```bash
+bundle exec rubocop
+```
+
+```
+Inspecting 6 files
+......
+
+6 files inspected, no offenses detected
+```
+
+## Step 7: Run It
+
+Add the gem to a LegionIO project's Gemfile:
+
+```ruby
+gem "lex-weather_checker", path: "../lex-weather_checker"
+```
+
+Then start the engine:
+
+```bash
+legionio start
+```
+
+LegionIO auto-discovers extensions by scanning `Bundler.load.specs` at boot. No registration, no config — add the gem to the Gemfile and it's live. The `Checker` polling actor starts immediately and calls the `Forecast` runner every 60 seconds.
 
 ## What Just Happened?
 
 You built a complete extension in 10 minutes:
-- **Runner**: a callable function that fetches weather data
-- **Actor**: a polling loop that calls the runner every 60 seconds
-- **Transport**: AMQP wiring generated automatically
-- **Specs**: test scaffolding included
 
-The extension system is how LegionIO grows. The core stays small. Your extension composes with everything else.
+- **Runner**: a callable function that fetches weather data from a live HTTP API
+- **Actor**: a polling loop that calls the runner every 60 seconds
+- **Transport**: AMQP wiring generated automatically by the framework
+- **Specs**: test scaffolding included and passing from the first scaffold
+
+The extension system is how LegionIO grows. The core stays small. Your extension composes with everything else — other extensions can call your runners, chain tasks through conditioners and transformers, or subscribe to results over AMQP.
 
 ## What's Next
 
