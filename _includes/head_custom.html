@@ -7,3 +7,177 @@
 <meta name="twitter:title" content="{{ page.title | default: site.title }}" />
 <meta name="twitter:description" content="{{ page.description | default: site.description }}" />
 <meta name="twitter:image" content="{{ site.url }}/assets/images/og-image.png" />
+
+<style>
+/* Hero visualization section */
+.hero-section {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  height: 90vh;
+  min-height: 500px;
+  max-height: 900px;
+  overflow: hidden;
+  background: #07060f;
+}
+
+.hero-section iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  pointer-events: none;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 2;
+  padding: 2rem;
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 50%,
+    rgba(7, 6, 15, 0.65) 0%,
+    rgba(7, 6, 15, 0.3) 50%,
+    transparent 100%
+  );
+}
+
+.hero-overlay h1 {
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  color: #c5c2f5;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 40px rgba(139, 131, 230, 0.3);
+}
+
+.hero-overlay .hero-tagline {
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  color: #a09ae8;
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+  max-width: 600px;
+  line-height: 1.5;
+}
+
+.hero-overlay .hero-stats {
+  font-size: clamp(0.8rem, 1.3vw, 1rem);
+  color: #7f77dd;
+  margin-bottom: 2rem;
+  letter-spacing: 0.05em;
+}
+
+.hero-overlay .hero-install {
+  background: rgba(30, 28, 58, 0.8);
+  border: 1px solid rgba(95, 87, 196, 0.4);
+  border-radius: 8px;
+  padding: 0.8rem 1.6rem;
+  font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
+  font-size: clamp(0.85rem, 1.4vw, 1.1rem);
+  color: #c5c2f5;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  cursor: default;
+  user-select: all;
+}
+
+.hero-overlay .hero-install .hero-prompt {
+  color: #5f57c4;
+  user-select: none;
+}
+
+.hero-overlay .hero-cta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero-overlay .hero-cta a {
+  padding: 0.6rem 1.4rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.hero-overlay .hero-cta a.hero-primary {
+  background: #5f57c4;
+  color: #fff;
+  border: 1px solid #7f77dd;
+}
+
+.hero-overlay .hero-cta a.hero-primary:hover {
+  background: #7f77dd;
+  box-shadow: 0 0 20px rgba(127, 119, 221, 0.3);
+}
+
+.hero-overlay .hero-cta a.hero-secondary {
+  background: transparent;
+  color: #a09ae8;
+  border: 1px solid rgba(95, 87, 196, 0.5);
+}
+
+.hero-overlay .hero-cta a.hero-secondary:hover {
+  border-color: #7f77dd;
+  color: #c5c2f5;
+}
+
+.hero-motto {
+  position: absolute;
+  bottom: 2rem;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #4a44a8;
+  font-size: 0.85rem;
+  font-style: italic;
+  z-index: 2;
+}
+
+/* Smooth transition from hero to content */
+.hero-section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, var(--body-background-color, #fff));
+  z-index: 3;
+}
+
+/* Fix content width after full-bleed hero */
+.hero-section + * {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    height: 80vh;
+    min-height: 400px;
+  }
+  .hero-overlay .hero-cta {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* Dark theme fade — matches JtD dark background #27262b */
+.hero-section::after {
+  background: linear-gradient(to bottom, transparent, #27262b);
+}
+</style>

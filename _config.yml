@@ -1,7 +1,8 @@
 title: LegionIO
 description: "Cognitive architecture for AI agents. One developer. 73 gems. 23,000 tests. Agents that dream."
-url: "https://legionio.github.io"
+url: "https://legionio.dev"
 theme: just-the-docs
+color_scheme: dark
 
 aux_links:
   GitHub: https://github.com/LegionIO

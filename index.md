@@ -5,39 +5,23 @@ nav_order: 1
 description: "Cognitive architecture for AI agents. Not a prompt wrapper."
 ---
 
-# LegionIO
-
-### What if your AI agent had a brain — not just a prompt?
-
-**73 extension gems. 234 cognitive modules. 23,000+ specs. One Ruby framework.**
-
-```bash
-gem install legionio
-```
-
----
-
-## See It in Action
-
-<!-- TODO: Replace with asciinema embed or gif after recording (Task 2 from catalyst plan) -->
-
-```
-$ legion start
-  Loading 73 extensions... done
-  Tick cycle: 13 phases active
-  Dream cycle: standby
-  API: http://localhost:4567
-  Ready.
-
-$ legion chat
-  You: Tell me about yourself
-  Agent: I'm a LegionIO cognitive agent. I have memory that fades,
-         predictions that adapt, and I dream during idle periods
-         to consolidate what I've learned. What would you like
-         to explore?
-```
-
-*45 seconds from install to your first conversation with an agent that thinks.*
+<div class="hero-section">
+  <iframe src="{{ '/assets/visualization.html' | relative_url }}" title="LegionIO cognitive architecture visualization" loading="eager"></iframe>
+  <div class="hero-overlay">
+    <h1>LegionIO</h1>
+    <p class="hero-tagline">What if your AI agent had a brain &mdash; not just a prompt?</p>
+    <p class="hero-stats">73 extension gems &middot; 234 cognitive modules &middot; 23,000+ specs</p>
+    <div class="hero-install">
+      <span class="hero-prompt">$ </span>gem install legionio
+    </div>
+    <div class="hero-cta">
+      <a href="{% link getting-started/quickstart-agent.md %}" class="hero-primary">See It Think</a>
+      <a href="{% link architecture.md %}" class="hero-secondary">How It Works</a>
+      <a href="{% link philosophy.md %}" class="hero-secondary">Why We Built This</a>
+    </div>
+  </div>
+  <div class="hero-motto">Too lazy for prompts. Built a brain instead.</div>
+</div>
 
 ---
 
@@ -94,6 +78,30 @@ flowchart LR
 
 ---
 
+## See It in Action
+
+<!-- TODO: Replace with asciinema embed or gif after recording (Task 2 from catalyst plan) -->
+
+```
+$ legion start
+  Loading 73 extensions... done
+  Tick cycle: 13 phases active
+  Dream cycle: standby
+  API: http://localhost:4567
+  Ready.
+
+$ legion chat
+  You: Tell me about yourself
+  Agent: I'm a LegionIO cognitive agent. I have memory that fades,
+         predictions that adapt, and I dream during idle periods
+         to consolidate what I've learned. What would you like
+         to explore?
+```
+
+*45 seconds from install to your first conversation with an agent that thinks.*
+
+---
+
 ## Community
 
 - [GitHub Discussions](https://github.com/LegionIO/docs/discussions) — questions, ideas, architecture talk
@@ -125,5 +133,3 @@ legion chat
 ---
 
 **License:** Core framework [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0) | Extensions [MIT](https://opensource.org/licenses/MIT)
-
-*Too lazy for prompts. Built a brain instead.*
