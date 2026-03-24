@@ -1,6 +1,6 @@
 ---
 title: Compatibility
-nav_order: 6
+nav_order: 7
 description: "Tested versions and compatibility matrix for LegionIO."
 ---
 

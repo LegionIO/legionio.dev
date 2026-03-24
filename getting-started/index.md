@@ -1,6 +1,6 @@
 ---
 title: Getting Started
-nav_order: 7
+nav_order: 8
 has_children: true
 description: "Quickstart guides for different audiences — AI builders, Ruby developers, LLM power users."
 ---

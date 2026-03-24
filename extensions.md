@@ -1,6 +1,6 @@
 ---
 title: Extensions
-nav_order: 5
+nav_order: 6
 description: "Browse all 73 LegionIO extensions — cognitive, operational, AI, and service integrations."
 ---
 
