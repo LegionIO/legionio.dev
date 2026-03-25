@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#07060f"/>
+      <stop offset="50%" stop-color="#1a1740"/>
+      <stop offset="100%" stop-color="#07060f"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#5f57c4"/>
+      <stop offset="100%" stop-color="#8b83e6"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="30%" cy="40%" r="40%">
+      <stop offset="0%" stop-color="#312e80" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="70%" cy="60%" r="35%">
+      <stop offset="0%" stop-color="#5f57c4" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow1)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+
+  <!-- Decorative nodes (neural network aesthetic) -->
+  <circle cx="180" cy="200" r="3" fill="#5f57c4" opacity="0.5"/>
+  <circle cx="250" cy="150" r="2" fill="#8b83e6" opacity="0.4"/>
+  <circle cx="320" cy="220" r="4" fill="#5f57c4" opacity="0.3"/>
+  <circle cx="900" cy="180" r="3" fill="#8b83e6" opacity="0.4"/>
+  <circle cx="980" cy="250" r="2" fill="#5f57c4" opacity="0.5"/>
+  <circle cx="1050" cy="150" r="3" fill="#8b83e6" opacity="0.3"/>
+  <circle cx="150" cy="450" r="2" fill="#5f57c4" opacity="0.4"/>
+  <circle cx="1080" cy="420" r="3" fill="#8b83e6" opacity="0.3"/>
+  <circle cx="400" cy="480" r="2" fill="#5f57c4" opacity="0.3"/>
+  <circle cx="850" cy="460" r="3" fill="#8b83e6" opacity="0.4"/>
+
+  <!-- Connecting lines -->
+  <line x1="180" y1="200" x2="250" y2="150" stroke="#5f57c4" stroke-width="0.5" opacity="0.3"/>
+  <line x1="250" y1="150" x2="320" y2="220" stroke="#5f57c4" stroke-width="0.5" opacity="0.2"/>
+  <line x1="900" y1="180" x2="980" y2="250" stroke="#8b83e6" stroke-width="0.5" opacity="0.3"/>
+  <line x1="980" y1="250" x2="1050" y2="150" stroke="#8b83e6" stroke-width="0.5" opacity="0.2"/>
+
+  <!-- Logo mark -->
+  <rect x="520" y="140" width="70" height="70" rx="16" fill="#312e80" stroke="#5f57c4" stroke-width="1.5"/>
+  <text x="555" y="190" font-family="system-ui,-apple-system,Helvetica,Arial,sans-serif" font-size="44" font-weight="700" fill="#c5c2f5" text-anchor="middle">L</text>
+  <circle cx="580" cy="150" r="5" fill="#8b83e6" opacity="0.7"/>
+  <circle cx="580" cy="150" r="2.5" fill="#c5c2f5"/>
+
+  <!-- Title -->
+  <text x="600" y="280" font-family="system-ui,-apple-system,Helvetica,Arial,sans-serif" font-size="64" font-weight="700" fill="#c5c2f5" text-anchor="middle" letter-spacing="-1">LegionIO</text>
+
+  <!-- Tagline -->
+  <text x="600" y="340" font-family="system-ui,-apple-system,Helvetica,Arial,sans-serif" font-size="26" font-weight="400" fill="#a09ae8" text-anchor="middle">Async Job Engine &amp; Agentic AI Platform</text>
+
+  <!-- Divider line -->
+  <rect x="440" y="370" width="320" height="1.5" rx="1" fill="url(#accent)" opacity="0.5"/>
+
+  <!-- Features -->
+  <text x="600" y="420" font-family="system-ui,-apple-system,Helvetica,Arial,sans-serif" font-size="18" fill="#7f77dd" text-anchor="middle" letter-spacing="0.5">Extension System  |  LLM Pipeline  |  MCP Server  |  GAIA Cognition</text>
+
+  <!-- Install command -->
+  <rect x="380" y="460" width="440" height="44" rx="8" fill="#1e1c3a" fill-opacity="0.8" stroke="#5f57c4" stroke-width="1" stroke-opacity="0.4"/>
+  <text x="600" y="488" font-family="ui-monospace,'Cascadia Code','Source Code Pro',Menlo,Consolas,monospace" font-size="17" fill="#c5c2f5" text-anchor="middle">
+    <tspan fill="#5f57c4">$</tspan> brew install legionio/tap/legion-tty
+  </text>
+
+  <!-- URL -->
+  <text x="600" y="560" font-family="system-ui,-apple-system,Helvetica,Arial,sans-serif" font-size="18" fill="#4a44a8" text-anchor="middle">legionio.dev</text>
+
+  <!-- Bottom accent line -->
+  <rect x="0" y="620" width="1200" height="10" fill="url(#accent)" opacity="0.3"/>
+</svg>
