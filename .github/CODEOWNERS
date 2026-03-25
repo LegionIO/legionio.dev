@@ -1,0 +1,6 @@
+# Default code owners for LegionIO docs site
+* @Esity
+
+# Formula and CI changes need review
+.github/ @Esity
+_config.yml @Esity
