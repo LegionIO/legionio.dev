@@ -1,74 +1,61 @@
-# legionio.dev — LegionIO Marketing and Documentation Site
+# docs-site: LegionIO Documentation Website
 
-**Level 3 Documentation**
+**Repository Level 3 Documentation**
 - **Parent**: `/Users/miverso2/rubymine/legion/CLAUDE.md`
-- **GitHub**: https://github.com/LegionIO/legionio.dev
-- **Live site**: https://legionio.dev
 
 ## Purpose
 
-Marketing and documentation website for LegionIO. Targets developers evaluating whether to adopt LegionIO as an async job engine, agentic AI platform, or Ruby cognitive architecture. Published via GitHub Pages.
+The public-facing documentation website for LegionIO, built with Jekyll and served via GitHub Pages. Contains architecture guides, getting-started content, extension development documentation, compatibility tables, and the project philosophy.
 
-## Stack
+**GitHub**: https://github.com/LegionIO/docs-site
+**Live site**: https://legionio.dev (CNAME configured)
 
-- **Jekyll 4.3** — static site generator
-- **Just the Docs 0.10** — documentation theme (dark color scheme)
-- **jekyll-seo-tag** — meta/OG tags
-- **GitHub Pages** — hosting (auto-deploys on push to main)
-
-## Repository Layout
+## Directory Structure
 
 ```
-legionio.dev/
-├── index.md                  # Home: hero + interactive visualization + navigation paths
-├── architecture.md           # Technical architecture deep-dive
-├── philosophy.md             # Design philosophy and motivation
-├── extensions.md             # Extension ecosystem overview
-├── settings.md               # Settings and configuration reference
-├── compatibility.md          # Ruby and dependency compatibility matrix
-├── enterprise.md             # Enterprise features, governance, compliance
-├── getting-started/          # 3 quickstart guides (agentic, LLM, Ruby paths)
-│   ├── quickstart-agent.md
-│   ├── quickstart-llm.md
-│   └── quickstart-ruby.md
-├── assets/
-│   ├── visualization.html    # Interactive SVG cognitive architecture hero animation
-│   ├── favicon.svg           # SVG favicon (purple orbital motif)
-│   ├── images/
-│   │   ├── og-image.png      # OpenGraph share image (1200x630 PNG)
-│   │   └── og-image.svg      # OG image source (SVG)
-│   └── head_custom.html      # Unused (see _includes/)
-├── _includes/
-│   └── head_custom.html      # Injected into <head>: favicon link, custom meta
-├── _config.yml               # Site config: title, theme, nav, search, footer
-├── Gemfile                   # jekyll ~> 4.3, just-the-docs ~> 0.10, jekyll-seo-tag ~> 2.8
-└── CNAME                     # legionio.dev
+docs-site/
+├── _config.yml           # Jekyll configuration (theme: just-the-docs)
+├── _includes/            # Shared partials (header, footer, nav)
+├── _site/                # Generated output (do not edit, git-ignored)
+├── assets/               # Static assets (CSS, JS, images, visualization.html)
+├── getting-started/      # Getting-started guides (quickstart-agent.md, etc.)
+├── index.md              # Home page (hero section, install, quick links)
+├── architecture.md       # Architecture deep-dive
+├── philosophy.md         # Project philosophy
+├── extensions.md         # Extension ecosystem overview
+├── compatibility.md      # Ruby version and gem compatibility matrix
+├── enterprise.md         # Enterprise features and deployment guide
+├── schema.md             # Settings JSON schema reference
+├── CNAME                 # GitHub Pages custom domain
+├── Gemfile               # Jekyll + just-the-docs
+└── Gemfile.lock
 ```
 
-## Key Design Decisions
+## Key Pages
 
-- **Hero**: The hero section uses an `<iframe>` embedding `assets/visualization.html` — an animated SVG showing cognitive modules and their connections. No JavaScript framework.
-- **Three quickstart paths**: Agent (GAIA/cognitive), LLM (provider setup, pipeline), and Ruby developer (job engine basics). Each path promises an "aha moment" in 15 minutes.
-- **No framework**: All custom JS is vanilla. The Just the Docs theme handles search, navigation, and layout.
-- **OG image**: `/assets/images/og-image.png` — referenced in `_config.yml` as the default image for all pages.
+| Page | Path | Audience |
+|------|------|----------|
+| Home | `index.md` | All visitors |
+| Architecture | `architecture.md` | Developers |
+| Getting Started | `getting-started/` | New users |
+| Extensions | `extensions.md` | Extension authors |
+| Philosophy | `philosophy.md` | All visitors |
+| Compatibility | `compatibility.md` | Integrators |
+| Enterprise | `enterprise.md` | Enterprise users |
 
-## Local Development
+## Development
 
 ```bash
 bundle install
-bundle exec jekyll serve
-# http://localhost:4000
+bundle exec jekyll serve --livereload
+# Site available at http://localhost:4000
 ```
 
-## Deployment
+## Design Notes
 
-GitHub Pages auto-deploys on push to `main`. No CI workflow needed — Pages runs Jekyll natively.
-
-## Content Governance
-
-- Stats on the homepage (gem count, spec count, cognitive modules) should match actual shipped state.
-- Current hero stats: `73 extension gems · 234 cognitive modules · 23,000+ specs` — update when these change significantly.
-- Do not add external tracking scripts or analytics to this repo.
+- Theme: just-the-docs (https://just-the-docs.com/)
+- The hero section in `index.md` embeds `assets/visualization.html` — an interactive cognitive architecture visualization
+- Content on this site is user-facing marketing/docs, not AI-facing context. For AI-facing docs, see `/Users/miverso2/rubymine/legion/docs/`
 
 ---
 
