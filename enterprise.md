@@ -1,6 +1,6 @@
 ---
 title: Enterprise
-nav_order: 4
+nav_order: 8
 description: "Enterprise capabilities: security, compliance, audit, and operational maturity."
 ---
 
@@ -40,6 +40,17 @@ LegionIO is built by someone who does infrastructure for a living. Security, aud
 - Database operations use parameterized queries via Sequel ORM
 - File permission system with deny list (~/.ssh, ~/.gnupg, ~/.aws/credentials)
 
+### Compliance Framework (LegionIO)
+
+Built-in compliance profiles for regulated environments:
+
+- **PHI**: Protected health information — PHI-aware cache TTL caps (3600s max), PHI tagging (`Compliance::PhiTag`), access logging (`Compliance::PhiAccessLog`), cryptographic erasure (`Compliance::PhiErasure`)
+- **PCI**: Payment card industry data classification
+- **PII**: Personally identifiable information detection in LLM pipeline (SSN, email, phone, MRN, DOB patterns)
+- **FedRAMP**: Federal risk authorization profile
+
+All four compliance types are enabled by default at `confidential` classification level. Compliance profile is injected into the LLM pipeline Classification step (step 6) automatically.
+
 ## Access Control (legion-rbac)
 
 Vault-style flat policies for fine-grained access control:
@@ -62,6 +73,29 @@ Vault-style flat policies for fine-grained access control:
 - Extension lifecycle tracking via catalog state machine
 - Health checks and node status reporting
 - Distributed scheduling with leader election
+
+### LLM Governance Pipeline
+
+Every LLM call runs through a [19-step governance pipeline]({% link pipeline.md %}):
+
+- RBAC enforcement on every call
+- PII/PHI classification before data leaves the network
+- Budget enforcement with per-session spending caps
+- Full audit trail with distributed tracing
+- Knowledge capture writes synthesis back to Apollo
+- Confidence scoring on every response
+
+The pipeline is enabled by default. Individual steps degrade gracefully when their backing subsystems are not loaded.
+
+### Tamper-Evident Audit
+
+`Legion::Data::AuditRecord` provides SHA-256 hash chain verification for audit records:
+
+- Append-only records linked by `parent_hash` and `chain_hash`
+- Chain verification walks and re-derives every hash
+- PostgreSQL enforces immutability with `NO UPDATE/DELETE` rules
+- Tiered retention: hot (database) -> warm (archive) -> cold (compressed JSONL to S3/local)
+- `legion audit verify_chain` CLI command for integrity checks
 
 ## Deployment
 
@@ -95,6 +129,14 @@ Everything is a JSON config file. Config resolution order:
 5. DNS bootstrap (`legion-bootstrap.<domain>` TXT records)
 
 Secret resolution happens after Vault is available: `vault://secret/path#key` URIs are resolved automatically.
+
+### Resilience
+
+- **Transport spool**: JSONL disk buffer when RabbitMQ is unavailable (72hr retention, encrypted at rest, 500MB total limit)
+- **Connection pools**: RabbitMQ session pooling with automatic failover across cluster nodes
+- **Force reconnect**: Detects pathological Bunny recovery loops and performs full session replacement
+- **Network watchdog**: Background task monitors connectivity, pauses actors on sustained failure, triggers reload on recovery (opt-in via `network.watchdog.enabled`)
+- **Dynamic Vault leases**: `LeaseManager` handles credential rotation transparently via `lease://` URI scheme
 
 ## Scale Characteristics
 

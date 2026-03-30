@@ -45,6 +45,7 @@ Framework plumbing — task management, scheduling, health monitoring, internal 
 | lex-eval | Model evaluation and benchmarking |
 | lex-workflow | Multi-step workflow definitions |
 | lex-llm-gateway | LLM request routing and load balancing |
+| lex-react | Reactive event processing and signal evaluation |
 
 ## Cognitive Architecture
 
@@ -69,6 +70,9 @@ Framework plumbing — task management, scheduling, health monitoring, internal 
 | lex-dream | Dream cycle orchestration and journal generation |
 | lex-mind-growth | Cognitive development — proposer, analyzer, builder, validator |
 | lex-reflect | Self-reflection and introspection engine |
+| lex-knowledge | Document knowledge base with corpus monitoring and RAG |
+| lex-extinction | Agent lifecycle termination governance |
+| lex-cortex | Legacy cognitive coordinator (absorbed into legion-gaia) |
 
 ## GAIA-Tier Extensions
 
@@ -80,6 +84,14 @@ Higher-order coordination and cognitive infrastructure.
 | lex-gaia-channel | Channel abstraction for perception-to-action routing |
 | lex-gaia-router | Message routing within the cognitive mesh |
 | lex-gaia-dream | Dream cycle coordination |
+| lex-privatecore | Privacy enforcement for the cognitive stack |
+| lex-tick | Tick cycle orchestrator (required by GAIA) |
+
+## Mesh Networking
+
+| Extension | Description |
+|:----------|:-----------|
+| lex-mesh | Inter-agent mesh networking — peer discovery, RPC, broadcast, multicast |
 
 ## LLM Provider Integrations
 
@@ -163,3 +175,20 @@ legion generate actor poller
 ```
 
 See the [Extension Dev Quickstart]({% link getting-started/quickstart-ruby.md %}) for a full walkthrough.
+
+## Absorbers
+
+Absorbers are a new extension component type for pattern-matched content acquisition. An absorber watches for URLs, files, or meeting transcripts that match its patterns, extracts content, and ingests it into the Apollo knowledge store.
+
+```bash
+# Scaffold an absorber
+legion generate absorber my_absorber
+
+# Absorb a URL
+legion absorb url https://example.com/doc
+
+# List registered absorbers
+legion absorb list
+```
+
+See the [Architecture Overview]({% link architecture.md %}) for how absorbers fit into the extension system.

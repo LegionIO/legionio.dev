@@ -8,7 +8,7 @@ description: "See the cognitive tick cycle in action — an agent that perceives
 # Cognitive Agent Quickstart
 
 **Time:** 15 minutes
-**You'll see:** An agent running the 13-phase tick cycle, having a conversation with memory and mood, then dreaming during idle time.
+**You'll see:** An agent running the 16-phase tick cycle, having a conversation with memory and mood, then dreaming during idle time.
 **Prerequisites:** Ruby >= 3.4, RabbitMQ running
 
 {: .note }
@@ -38,14 +38,14 @@ $ legionio start
   Legion::Settings Loaded
   Legion::Rbac loaded
   Legion::LLM loaded (provider: anthropic, model: claude-sonnet-4-6)
-  Legion::Gaia loaded (tick cycle: 13 phases, dream cycle: 7 phases)
+  Legion::Gaia loaded (tick cycle: 16 phases active, 8 dream phases standby)
   Logging hooks registered for RMQ publishing
   73 extensions loaded with subscription:42,every:18,poll:8,once:3,loop:2
   Starting Legion API on 0.0.0.0:4567
-  Started Legion v1.4.107
+  Started Legion v1.6.37
 ```
 
-The key lines to notice: GAIA comes up with 13 tick phases and 7 dream phases before any extensions load. The cognitive layer is the foundation, not a plugin.
+The key lines to notice: GAIA comes up with 16 tick phases and 8 dream phases before any extensions load. The cognitive layer is the foundation, not a plugin.
 
 ## Step 3: Chat with a Cognitive Agent
 
@@ -102,7 +102,7 @@ you > check if the API is up
 
 [tool] http.get(url: "http://0.0.0.0:4567/status")
 
-legion > The API is responding. Status 200, version 1.4.107, uptime 4m 12s.
+legion > The API is responding. Status 200, version 1.6.37, uptime 4m 12s.
 ```
 
 ## Step 4: Watch It Dream
@@ -171,7 +171,7 @@ It went idle with a loose end and woke up with it prioritized. That's not retrie
 
 ## What Just Happened?
 
-Every tick, the agent ran 13 cognitive phases — not just "call LLM, return response." It perceived your input, evaluated it emotionally, retrieved relevant memories, checked predictions, selected an action, and reflected on the interaction.
+Every tick, the agent ran 16 cognitive phases — not just "call LLM, return response." It perceived your input, evaluated it emotionally, retrieved relevant memories, checked predictions, selected an action, and reflected on the interaction.
 
 When it went idle, it dreamed — consolidating memories, resolving contradictions, forming new priorities. Not because you told it to. Because that's what brains do.
 

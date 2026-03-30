@@ -10,7 +10,7 @@ description: "Cognitive architecture for AI agents. Not a prompt wrapper."
   <div class="hero-overlay">
     <h1>LegionIO</h1>
     <p class="hero-tagline">What if your AI agent had a brain &mdash; not just a prompt?</p>
-    <p class="hero-stats">73 extension gems &middot; 234 cognitive modules &middot; 23,000+ specs</p>
+    <p class="hero-stats">73 extension gems &middot; 60 MCP tools &middot; 24-phase cognitive cycle &middot; 23,000+ specs</p>
     <div class="hero-install">
       <span class="hero-prompt">$ </span>gem install legionio
     </div>
@@ -41,7 +41,7 @@ Pick your path — each one gets you to an "aha" moment in 15 minutes or less.
 
 ## The Cognitive Stack
 
-Every LegionIO agent runs a **tick cycle** — a 13-phase cognitive loop modeled on biological neural processing. Each tick, the agent perceives, remembers, predicts, decides, acts, and reflects. During idle periods, a 7-phase **dream cycle** consolidates and reorganizes memory.
+Every LegionIO agent runs a **tick cycle** — a 24-phase cognitive loop modeled on biological neural processing. 16 active phases run each tick: the agent perceives, remembers, predicts, decides, acts, and reflects. During idle periods, an 8-phase **dream cycle** consolidates memory, resolves contradictions, and forms new agendas.
 
 ```mermaid
 flowchart LR
@@ -55,19 +55,24 @@ flowchart LR
         F --> G["Procedural\nCheck"]
         G --> H["Prediction\nEngine"]
         H --> I["Mesh\nInterface"]
-        I --> J["Gut\nInstinct"]
+        I --> N["Social\nCognition"]
+        N --> O["Theory of\nMind"]
+        O --> J["Gut\nInstinct"]
         J --> K["Action\nSelection"]
         K --> L["Memory\nConsolidation"]
-        L --> M["Post-Tick\nReflection"]
+        L --> P["Homeostasis\nRegulation"]
+        P --> M["Post-Tick\nReflection"]
     end
 
     subgraph DREAM["Dream Cycle"]
         direction LR
         D1["Memory\nAudit"] --> D2["Association\nWalk"]
         D2 --> D3["Contradiction\nResolution"]
-        D3 --> D4["Agenda\nFormation"]
+        D3 --> D8["Identity\nEntropy"]
+        D8 --> D4["Agenda\nFormation"]
         D4 --> D5["Consolidation\nCommit"]
-        D5 --> D6["Dream\nReflection"]
+        D5 --> D9["Knowledge\nPromotion"]
+        D9 --> D6["Dream\nReflection"]
         D6 --> D7["Dream\nNarration"]
     end
 ```
@@ -78,14 +83,22 @@ flowchart LR
 
 ---
 
+## The LLM Pipeline
+
+Every LLM call runs through a **19-step governance pipeline** — not just "call the model." RBAC enforcement, PII/PHI classification, RAG context injection, budget guards, tool dispatch, knowledge capture, confidence scoring, and full audit trail. Every step is optional, composable, and independently removable.
+
+[Pipeline Deep-Dive]({% link pipeline.md %})
+
+---
+
 ## See It in Action
 
 <!-- TODO: Replace with asciinema embed or gif after recording (Task 2 from catalyst plan) -->
 
 ```
 $ legion start
-  Loading 73 extensions... done
-  Tick cycle: 13 phases active
+  73 extensions loaded
+  Tick cycle: 16 phases active, 8 dream phases standby
   Dream cycle: standby
   API: http://localhost:4567
   Ready.
@@ -126,6 +139,9 @@ legion start
 
 # Or just chat
 legion chat
+
+# Or start the 19-step LLM pipeline
+legion start
 ```
 
 **Requirements:** Ruby >= 3.4, RabbitMQ. Optional: PostgreSQL/MySQL/SQLite, Redis/Memcached, HashiCorp Vault.

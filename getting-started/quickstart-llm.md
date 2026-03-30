@@ -37,9 +37,9 @@ Verify the install:
 
 ```
 $ legion version
-LegionIO v1.4.107
-legion-llm  v0.3.11
-legion-mcp  v0.4.0
+LegionIO v1.6.37
+legion-llm  v0.5.20
+legion-mcp  v0.6.6
 ```
 
 ---
@@ -71,7 +71,7 @@ Export your key and start a chat session:
 $ export ANTHROPIC_API_KEY=sk-ant-...
 
 $ legion chat
-LegionIO v1.4.107  |  provider: anthropic  |  model: claude-3-5-haiku-20241022  |  tier: cloud
+LegionIO v1.6.37  |  provider: anthropic  |  model: claude-3-5-haiku-20241022  |  tier: cloud
 Type 'exit' to quit.
 
 you > What are the primary benefits of async job queues?
@@ -139,7 +139,7 @@ Start chat again. The startup line now reflects the active routing strategy.
 
 ```
 $ legion chat
-LegionIO v1.4.107  |  routing: cost_optimized  |  providers: ollama, anthropic, openai
+LegionIO v1.6.37  |  routing: cost_optimized  |  providers: ollama, anthropic, openai
 Type 'exit' to quit.
 
 you > What day comes after Tuesday?
@@ -175,7 +175,7 @@ Notice that the simple factual question was routed to the local Ollama model (fa
 
 ```
 $ legion chat
-LegionIO v1.4.107  |  routing: cost_optimized  |  providers: ollama (unavailable), anthropic, openai
+LegionIO v1.6.37  |  routing: cost_optimized  |  providers: ollama (unavailable), anthropic, openai
 WARNING: ollama unreachable at http://localhost:11434 — removed from pool
 Type 'exit' to quit.
 
@@ -199,7 +199,7 @@ Ask the same question twice to see it in action:
 
 ```
 $ legion chat
-LegionIO v1.4.107  |  routing: cost_optimized  |  providers: ollama, anthropic, openai
+LegionIO v1.6.37  |  routing: cost_optimized  |  providers: ollama, anthropic, openai
 Type 'exit' to quit.
 
 you > List the three OSI layers most relevant to load balancer configuration.

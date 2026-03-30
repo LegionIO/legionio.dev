@@ -1,6 +1,6 @@
 ---
 title: Settings Reference
-nav_order: 4
+nav_order: 9
 description: "Complete reference for every configurable setting in LegionIO and its core gems."
 ---
 
