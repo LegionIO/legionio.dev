@@ -373,9 +373,22 @@ File: `~/.legionio/settings/logging.json`
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | `level` | string | `"info"` | Log level: `debug`, `info`, `warn`, `error`, `fatal` |
-| `location` | string | `"stdout"` | Log destination: `stdout`, `stderr`, or file path |
+| `format` | string | `"text"` | Output format: `text` or `json` (structured) |
+| `log_file` | string | `"./legionio/logs/legion.log"` | File log destination path |
+| `log_stdout` | boolean | `true` | Also log to stdout |
 | `trace` | boolean | `true` | Include trace IDs in log output |
-| `backtrace_logging` | boolean | `true` | Include backtraces in error logs |
+| `async` | boolean | `true` | Enable async log writer |
+| `include_pid` | boolean | `false` | Include process ID in log output |
+
+### logging.transport
+
+Forward log events over AMQP for centralized collection.
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `enabled` | boolean | `true` | Enable AMQP log forwarding |
+| `forward_logs` | boolean | `true` | Forward standard log events |
+| `forward_exceptions` | boolean | `true` | Forward exception events |
 
 ### logging.async
 
@@ -394,6 +407,9 @@ Log shipping to external SIEM/aggregation systems.
 | `batch_size` | integer | `100` | Events per batch before flush |
 | `flush_interval` | integer | `5` | Seconds between automatic flushes |
 | `levels` | array | `["warn"]` | Minimum levels to ship (lowest in array wins) |
+| `endpoint` | string | `nil` | HTTP transport endpoint URL (Splunk HEC, etc.) |
+| `auth_token` | string | `nil` | HTTP transport auth token (Bearer or Splunk) |
+| `file.path` | string | `"/var/log/legion/siem.log"` | File transport output path |
 
 ### logging.redactor
 
@@ -1068,6 +1084,84 @@ Compliance framework for regulated environments. Defined in `LegionIO` main gem.
 | `fedramp_enabled` | boolean | `true` | Enable FedRAMP controls |
 | `log_redaction` | boolean | `true` | Enable automatic log redaction |
 | `cache_phi_max_ttl` | integer | `3600` | Maximum cache TTL for PHI data in seconds (1 hour) |
+
+---
+
+## absorbers
+
+Pattern-matched content acquisition from external sources. Defined in `legion-settings`.
+
+File: `~/.legionio/settings/absorbers.json`
+
+### absorbers (top-level)
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `enabled` | boolean | `true` | Enable absorber subsystem |
+| `max_depth` | integer | `5` | Maximum recursion depth for content traversal |
+
+### absorbers.sources.meetings
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `enabled` | boolean | `true` | Absorb meeting transcripts and recordings |
+| `include_chat` | boolean | `true` | Include meeting chat messages |
+| `include_files` | boolean | `true` | Include shared files from meetings |
+| `retention_days` | integer | `90` | Days to retain absorbed meeting content |
+| `min_duration_min` | integer | `5` | Minimum meeting duration to absorb (minutes) |
+
+### absorbers.sources.email_inbox
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `enabled` | boolean | `false` | Absorb email inbox content |
+| `folder` | string | `"inbox"` | Email folder to monitor |
+| `max_age_days` | integer | `30` | Maximum email age to absorb |
+
+### absorbers.sources.github
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `enabled` | boolean | `true` | Absorb GitHub events |
+| `events` | array | `["pull_request", "issues"]` | GitHub event types to absorb |
+
+### absorbers.sources.files
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `enabled` | boolean | `true` | Absorb local files |
+| `watch_dirs` | array | `[]` | Directories to watch for changes |
+| `extensions` | array | `["pdf", "docx", "txt", "md", "pptx", "rtf"]` | File extensions to absorb |
+
+---
+
+## network
+
+Network monitoring and health checks.
+
+### network.watchdog
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `enabled` | boolean | `false` | Enable network watchdog |
+| `failure_threshold` | integer | `5` | Consecutive failures before pausing actors |
+| `check_interval` | integer | `15` | Seconds between health checks |
+
+When the failure threshold is reached, all actors are paused. On recovery, `Legion.reload` is triggered to restore connections.
+
+---
+
+## security
+
+Security settings for mTLS and identity.
+
+### security.mtls
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `enabled` | boolean | `false` | Enable mTLS certificate rotation |
+| `vault_pki_path` | string | `"pki/issue/legion-internal"` | Vault PKI issue path |
+| `cert_ttl` | string | `"24h"` | Certificate TTL |
 
 ---
 
