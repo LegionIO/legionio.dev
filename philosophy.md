@@ -8,7 +8,7 @@ description: "Design principles and architecture philosophy for the LegionIO cog
 
 ## What LegionIO Is
 
-LegionIO is a cognitive architecture for AI agents built in Ruby. Agents run a 13-phase tick cycle modeled on biological neural processing — perceiving, remembering, predicting, deciding, acting, and reflecting every tick. When idle, they enter a 7-phase dream cycle that consolidates memory, resolves contradictions, and forms new agendas.
+LegionIO is a cognitive architecture for AI agents built in Ruby. Agents run a 16-phase tick cycle modeled on biological neural processing — perceiving, remembering, predicting, deciding, acting, and reflecting every tick. When idle, they enter an 8-phase dream cycle that consolidates memory, resolves contradictions, promotes knowledge, and forms new agendas.
 
 234 cognitive modules organized into 13 domain gems model distinct aspects of cognition: memory that fades, emotions that shift decisions, trust that's earned through interaction, predictions that fail and adapt. Every module is optional. They compose, interact, and adapt when others are absent.
 
@@ -32,7 +32,7 @@ An agent should have its own internal state, its own memory, its own judgment. I
 
 ### The tick cycle is the execution model
 
-Every agent runs the same 13-phase tick cycle: sensory processing, emotional evaluation, memory retrieval, knowledge retrieval, identity entropy check, working memory integration, procedural check, prediction engine, mesh interface, gut instinct, action selection, memory consolidation, post-tick reflection.
+Every agent runs the same 16-phase tick cycle: sensory processing, emotional evaluation, memory retrieval, knowledge retrieval, identity entropy check, working memory integration, procedural check, prediction engine, mesh interface, social cognition, theory of mind, gut instinct, action selection, memory consolidation, homeostasis regulation, post-tick reflection.
 
 This isn't decorative. Each phase does real computational work. Skipping phases changes behavior. The tick cycle is what makes a LegionIO agent an agent rather than a function that calls an LLM.
 

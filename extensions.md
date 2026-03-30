@@ -66,7 +66,7 @@ Framework plumbing — task management, scheduling, health monitoring, internal 
 | lex-agentic-homeostasis | Balance, rhythm, energy, fatigue recovery |
 | lex-agentic-defense | Bias detection, error monitoring, cognitive immune system |
 | lex-agentic-integration | Cross-modal binding, coherence, Global Workspace Theory |
-| lex-apollo | Shared knowledge store (PostgreSQL + pgvector) |
+| lex-apollo | Two-tier shared knowledge store (local SQLite+FTS5 + global PostgreSQL+pgvector) |
 | lex-dream | Dream cycle orchestration and journal generation |
 | lex-mind-growth | Cognitive development — proposer, analyzer, builder, validator |
 | lex-reflect | Self-reflection and introspection engine |

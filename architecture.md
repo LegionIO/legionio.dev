@@ -83,13 +83,11 @@ When an agent goes idle, it enters an 8-phase dream cycle:
 | 1 | Memory Audit | Review recent memories for importance |
 | 2 | Association Walk | Find connections between unrelated memories |
 | 3 | Contradiction Resolution | Resolve conflicting beliefs or memories |
-| 4 | Identity Entropy | Verify identity coherence during dream state |
-| 5 | Agenda Formation | Form new priorities based on consolidated knowledge |
-| 6 | Consolidation Commit | Persist reorganized memories |
-| 7 | Knowledge Promotion | Promote dream insights to Apollo shared knowledge |
-| 8 | Dream Reflection | Evaluate what the dream cycle produced |
-
-Note: Dream Narration (the old phase 7) has been replaced by Knowledge Promotion. Dream insights now write directly to the Apollo shared knowledge store rather than producing a natural-language journal.
+| 4 | Agenda Formation | Form new priorities based on consolidated knowledge |
+| 5 | Consolidation Commit | Persist reorganized memories |
+| 6 | Knowledge Promotion | Promote dream insights to Apollo shared knowledge |
+| 7 | Dream Reflection | Evaluate what the dream cycle produced |
+| 8 | Dream Narration | Generate natural-language narrative of the dream cycle |
 
 ## Cognitive Domains
 

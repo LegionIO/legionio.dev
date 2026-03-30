@@ -55,11 +55,12 @@ legionio.dev/
 | Home | `index.md` | 1 | All visitors |
 | Philosophy | `philosophy.md` | 2 | All visitors |
 | Architecture | `architecture.md` | 3 | Developers |
-| Enterprise | `enterprise.md` | 4 | Enterprise users |
-| Settings Reference | `settings.md` | 4 | Operators, developers |
+| LLM Pipeline | `pipeline.md` | 4 | Developers |
 | Extensions | `extensions.md` | 5 | Extension authors |
 | Compatibility | `compatibility.md` | 6 | Integrators |
 | Getting Started | `getting-started/` | 7 | New users |
+| Enterprise | `enterprise.md` | 8 | Enterprise users |
+| Settings Reference | `settings.md` | 9 | Operators, developers |
 
 ## Development
 

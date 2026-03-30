@@ -68,8 +68,7 @@ flowchart LR
         direction LR
         D1["Memory\nAudit"] --> D2["Association\nWalk"]
         D2 --> D3["Contradiction\nResolution"]
-        D3 --> D8["Identity\nEntropy"]
-        D8 --> D4["Agenda\nFormation"]
+        D3 --> D4["Agenda\nFormation"]
         D4 --> D5["Consolidation\nCommit"]
         D5 --> D9["Knowledge\nPromotion"]
         D9 --> D6["Dream\nReflection"]
@@ -140,8 +139,6 @@ legion start
 # Or just chat
 legion chat
 
-# Or start the 19-step LLM pipeline
-legion start
 ```
 
 **Requirements:** Ruby >= 3.4, RabbitMQ. Optional: PostgreSQL/MySQL/SQLite, Redis/Memcached, HashiCorp Vault.

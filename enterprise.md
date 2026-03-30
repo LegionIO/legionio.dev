@@ -49,7 +49,7 @@ Built-in compliance profiles for regulated environments:
 - **PII**: Personally identifiable information detection in LLM pipeline (SSN, email, phone, MRN, DOB patterns)
 - **FedRAMP**: Federal risk authorization profile
 
-All four compliance types are enabled by default at `confidential` classification level. Compliance profile is injected into the LLM pipeline Classification step (step 6) automatically.
+All four compliance types are enabled by default with a `confidential` classification level. When active, the compliance profile is injected into the LLM pipeline Classification step (step 6) automatically. Disable individual types via `compliance.phi_enabled`, `compliance.pci_enabled`, etc.
 
 ## Access Control (legion-rbac)
 
