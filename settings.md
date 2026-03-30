@@ -302,7 +302,7 @@ File: `~/.legionio/settings/crypt.json`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| `enabled` | boolean | auto | Enable Vault integration (auto-detected from vault gem presence) |
+| `enabled` | boolean | `nil` | Enable Vault integration (when omitted/`nil`, auto-detected from Vault gem presence) |
 | `protocol` | string | `"http"` | Vault protocol (`http` or `https`) |
 | `address` | string | `"localhost"` | Vault server address |
 | `port` | integer | `8200` | Vault server port |
@@ -464,7 +464,7 @@ File: `~/.legionio/settings/llm.json`
 |-----|------|---------|-------------|
 | `enabled` | boolean | `false` | Enable OpenAI provider |
 | `default_model` | string | `"gpt-4o"` | Default OpenAI model ID |
-| `api_key` | string | `["env://OPENAI_API_KEY", "env://CODEX_API_KEY"]` | OpenAI API key (fallback chain) |
+| `api_key` | string&nbsp;|&nbsp;array | `["env://OPENAI_API_KEY", "env://CODEX_API_KEY"]` | OpenAI API key (fallback chain) |
 
 ### llm.providers.gemini
 
@@ -554,7 +554,7 @@ Retrieval-Augmented Generation context injection from Apollo knowledge store.
 | `utilization_compact_threshold` | float | `0.7` | Context utilization ratio to switch to compact mode |
 | `utilization_skip_threshold` | float | `0.9` | Context utilization ratio to skip RAG entirely |
 | `trivial_max_chars` | integer | `20` | Messages shorter than this are checked against trivial patterns |
-| `trivial_patterns` | array | `["hello", "hi", "hey", "ping", ...]` | Patterns that skip RAG lookup |
+| `trivial_patterns` | array | `["hello", "hi", "hey", "ping"]` | Patterns that skip RAG lookup (example set; extend with other trivial greetings as needed) |
 
 ### llm.embedding
 
@@ -903,7 +903,7 @@ Channel adapters for human-agent communication.
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| `mode` | boolean | `false` | Enable cross-node message routing |
+| `enabled` | boolean | `false` | Enable cross-node message routing |
 | `allowed_worker_ids` | array | `[]` | Worker IDs permitted to route through GAIA |
 
 ### gaia.session

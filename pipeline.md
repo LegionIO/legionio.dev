@@ -183,10 +183,16 @@ The pipeline is configured via `~/.legionio/settings/llm.json`:
 {
   "llm": {
     "pipeline_enabled": true,
-    "routing": "cost_optimized",
+    "routing": {
+      "enabled": true,
+      "tiers": ["cost_optimized"],
+      "health": {
+        "probe_interval_seconds": 30
+      }
+    },
     "rag": {
-      "full_limit": 0.5,
-      "compact_limit": 0.75,
+      "full_limit": 10,
+      "compact_limit": 5,
       "min_confidence": 0.3
     },
     "confidence": {
