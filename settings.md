@@ -189,7 +189,7 @@ Optional Kafka adapter for event streaming alongside RabbitMQ. Requires `rdkafka
 
 ### transport.spool
 
-Disk-based message buffer for when AMQP is unavailable. Spool is configured via method defaults, not the settings hash.
+Disk-based message buffer for when AMQP is unavailable. The defaults below live in code but can be overridden via `~/.legionio/settings/transport.json` under the `transport.spool` key.
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -499,7 +499,7 @@ Dynamic model routing with tiered provider selection and health tracking.
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | `enabled` | boolean | `false` | Enable dynamic routing |
-| `default_intent` | hash | `{privacy: "normal", capability: "moderate", cost: "normal"}` | Default request intent for routing decisions |
+| `default_intent` | hash | `{"privacy":"normal","capability":"moderate","cost":"normal"}` | Default request intent for routing decisions |
 | `rules` | array | `[]` | Custom routing rules |
 
 #### llm.routing.tiers

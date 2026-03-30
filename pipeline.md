@@ -185,9 +185,23 @@ The pipeline is configured via `~/.legionio/settings/llm.json`:
     "pipeline_enabled": true,
     "routing": {
       "enabled": true,
-      "tiers": ["cost_optimized"],
+      "tiers": {
+        "local": {
+          "provider": "ollama"
+        },
+        "fleet": {
+          "queue": "llm.inference"
+        },
+        "cloud": {
+          "providers": ["bedrock", "anthropic"]
+        }
+      },
       "health": {
-        "probe_interval_seconds": 30
+        "window_seconds": 300,
+        "circuit_breaker": {
+          "failure_threshold": 3,
+          "cooldown_seconds": 60
+        }
       }
     },
     "rag": {

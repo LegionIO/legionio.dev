@@ -56,8 +56,13 @@ mkdir -p ~/.legionio/settings
 cat > ~/.legionio/settings/llm.json << 'EOF'
 {
   "llm": {
-    "provider": "anthropic",
-    "api_key": "env://ANTHROPIC_API_KEY"
+    "default_provider": "anthropic",
+    "providers": {
+      "anthropic": {
+        "enabled": true,
+        "api_key": "env://ANTHROPIC_API_KEY"
+      }
+    }
   }
 }
 EOF
@@ -101,21 +106,28 @@ Update `llm.json` to declare multiple providers. LegionIO will route across them
 cat > ~/.legionio/settings/llm.json << 'EOF'
 {
   "llm": {
+    "default_provider": "anthropic",
     "providers": {
       "anthropic": {
-        "api_key": "env://ANTHROPIC_API_KEY",
-        "tier": "cloud"
+        "enabled": true,
+        "api_key": "env://ANTHROPIC_API_KEY"
       },
       "openai": {
-        "api_key": "env://OPENAI_API_KEY",
-        "tier": "cloud"
+        "enabled": true,
+        "api_key": "env://OPENAI_API_KEY"
       },
       "ollama": {
-        "base_url": "http://localhost:11434",
-        "tier": "local"
+        "enabled": true,
+        "base_url": "http://localhost:11434"
       }
     },
-    "routing": "cost_optimized"
+    "routing": {
+      "enabled": true,
+      "tiers": {
+        "local": { "provider": "ollama" },
+        "cloud": { "providers": ["anthropic", "openai"] }
+      }
+    }
   }
 }
 EOF
