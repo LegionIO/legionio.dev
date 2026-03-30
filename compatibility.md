@@ -29,10 +29,10 @@ description: "Tested versions and compatibility matrix for LegionIO."
 
 | Provider | Extension | Models Tested |
 |:---------|:----------|:-------------|
-| Anthropic | lex-claude | Claude Opus 4, Sonnet 4, Haiku 3.5 |
+| Anthropic | lex-claude | Claude Opus 4.6, Sonnet 4.6, Haiku 4.5 |
 | AWS Bedrock | lex-bedrock | Claude, Llama, Mistral via Bedrock |
-| OpenAI | lex-openai | GPT-4o, GPT-4-turbo, o1, o3 |
-| Google | lex-gemini | Gemini 2.5 Pro, Flash |
+| OpenAI | lex-openai | GPT-4.1, GPT-4o, o3, o4-mini |
+| Google | lex-gemini | Gemini 2.5 Pro, 2.5 Flash |
 | Azure AI | lex-azure-ai | Azure-hosted models via Foundry |
 | xAI | lex-xai | Grok models |
 | Local (Ollama) | legion-llm | Any Ollama-served model |
@@ -54,6 +54,7 @@ brew tap LegionIO/tap
 brew install legionio-ruby  # Ruby + YJIT + native gems
 brew install legionio       # Daemon + pure-Ruby gems
 brew install legion-tty     # Terminal UI gems
+brew install legion-dev     # Development tools
 ```
 
-Three-formula split: `legionio-ruby` (Ruby runtime), `legionio` (daemon), `legion-tty` (terminal tools).
+Four-formula split: `legionio-ruby` (Ruby runtime), `legionio` (daemon), `legion-tty` (terminal tools), `legion-dev` (development).

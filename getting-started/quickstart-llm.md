@@ -37,9 +37,9 @@ Verify the install:
 
 ```
 $ legion version
-LegionIO v1.4.107
-legion-llm  v0.3.11
-legion-mcp  v0.4.0
+LegionIO v1.6.37
+legion-llm  v0.5.20
+legion-mcp  v0.6.6
 ```
 
 ---
@@ -56,8 +56,13 @@ mkdir -p ~/.legionio/settings
 cat > ~/.legionio/settings/llm.json << 'EOF'
 {
   "llm": {
-    "provider": "anthropic",
-    "api_key": "env://ANTHROPIC_API_KEY"
+    "default_provider": "anthropic",
+    "providers": {
+      "anthropic": {
+        "enabled": true,
+        "api_key": "env://ANTHROPIC_API_KEY"
+      }
+    }
   }
 }
 EOF
@@ -71,7 +76,7 @@ Export your key and start a chat session:
 $ export ANTHROPIC_API_KEY=sk-ant-...
 
 $ legion chat
-LegionIO v1.4.107  |  provider: anthropic  |  model: claude-3-5-haiku-20241022  |  tier: cloud
+LegionIO v1.6.37  |  provider: anthropic  |  model: claude-3-5-haiku-20241022  |  tier: cloud
 Type 'exit' to quit.
 
 you > What are the primary benefits of async job queues?
@@ -101,21 +106,28 @@ Update `llm.json` to declare multiple providers. LegionIO will route across them
 cat > ~/.legionio/settings/llm.json << 'EOF'
 {
   "llm": {
+    "default_provider": "anthropic",
     "providers": {
       "anthropic": {
-        "api_key": "env://ANTHROPIC_API_KEY",
-        "tier": "cloud"
+        "enabled": true,
+        "api_key": "env://ANTHROPIC_API_KEY"
       },
       "openai": {
-        "api_key": "env://OPENAI_API_KEY",
-        "tier": "cloud"
+        "enabled": true,
+        "api_key": "env://OPENAI_API_KEY"
       },
       "ollama": {
-        "base_url": "http://localhost:11434",
-        "tier": "local"
+        "enabled": true,
+        "base_url": "http://localhost:11434"
       }
     },
-    "routing": "cost_optimized"
+    "routing": {
+      "enabled": true,
+      "tiers": {
+        "local": { "provider": "ollama" },
+        "cloud": { "providers": ["anthropic", "openai"] }
+      }
+    }
   }
 }
 EOF
@@ -139,7 +151,7 @@ Start chat again. The startup line now reflects the active routing strategy.
 
 ```
 $ legion chat
-LegionIO v1.4.107  |  routing: cost_optimized  |  providers: ollama, anthropic, openai
+LegionIO v1.6.37  |  routing: cost_optimized  |  providers: ollama, anthropic, openai
 Type 'exit' to quit.
 
 you > What day comes after Tuesday?
@@ -175,7 +187,7 @@ Notice that the simple factual question was routed to the local Ollama model (fa
 
 ```
 $ legion chat
-LegionIO v1.4.107  |  routing: cost_optimized  |  providers: ollama (unavailable), anthropic, openai
+LegionIO v1.6.37  |  routing: cost_optimized  |  providers: ollama (unavailable), anthropic, openai
 WARNING: ollama unreachable at http://localhost:11434 — removed from pool
 Type 'exit' to quit.
 
@@ -199,7 +211,7 @@ Ask the same question twice to see it in action:
 
 ```
 $ legion chat
-LegionIO v1.4.107  |  routing: cost_optimized  |  providers: ollama, anthropic, openai
+LegionIO v1.6.37  |  routing: cost_optimized  |  providers: ollama, anthropic, openai
 Type 'exit' to quit.
 
 you > List the three OSI layers most relevant to load balancer configuration.
